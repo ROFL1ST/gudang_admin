@@ -1,8 +1,14 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gudang_admin/homeAdmin.dart';
-
-void main() {
+import 'package:firebase_core/firebase_core.dart';
+Future<void> main() async {
+   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
