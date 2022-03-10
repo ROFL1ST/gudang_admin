@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import, camel_case_types, prefer_const_constructors, duplicate_ignore
+
 import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -25,15 +27,17 @@ class Firebase_service {
     int count = 0;
     try {
       await products.add(
-          {"nama_barang": namaBarang, "stock": stockBarang, "gambar": gambarBarang});
+          {"nama_barang": namaBarang, "stock": stockBarang, "gambar": gambarBarang });
       Alert(
         context: context,
         type: AlertType.success,
-        title: "Success",
+        title: "Success menambahkan barang",
         buttons: [
           DialogButton(
+            // ignore: prefer_const_constructors
             child: Text(
               "Ok",
+              // ignore: prefer_const_constructors
               style: TextStyle(color: Colors.white, fontSize: 20),
             ),
             onPressed: () => Navigator.popUntil(context, (route) {
@@ -68,7 +72,7 @@ class Firebase_service {
       Alert(
         context: context,
         type: AlertType.success,
-        title: "Success To Delete",
+        title: "Success menghapus barang",
         buttons: [
           DialogButton(
             child: Text(
