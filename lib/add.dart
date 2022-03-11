@@ -109,6 +109,7 @@ class _AddState extends State<Add> {
                     height: 20,
                   ),
                   TextField(
+                     readOnly: true,
                     controller: gambarBarang,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
