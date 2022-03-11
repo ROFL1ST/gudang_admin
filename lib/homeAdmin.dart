@@ -6,7 +6,7 @@ import 'package:gudang_admin/add.dart';
 import 'package:gudang_admin/api/firebase_service.dart';
 import 'package:gudang_admin/constants.dart';
 import 'package:gudang_admin/edit.dart';
-
+import 'package:intl/intl.dart';
 class HomeAdmin extends StatefulWidget {
   const HomeAdmin({Key? key}) : super(key: key);
 
@@ -75,7 +75,7 @@ class _HomeAdminState extends State<HomeAdmin> {
                                             ),
                                           ),
                                           Text(
-                                            "Tanggal Masuk : ${data["tgl_masuk"]}",
+                                             "Tanggal Masuk : ${DateFormat.yMMMEd().format(data["tgl_masuk"].toDate())}",
                                             style: TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold,
