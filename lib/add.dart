@@ -61,7 +61,7 @@ class _AddState extends State<Add> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Column(
+              ListView(
                 children: [
                   SizedBox(
                     height: 40,

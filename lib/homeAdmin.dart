@@ -1,12 +1,12 @@
-// ignore_for_file: file_names, prefer_const_constructors, sized_box_for_whitespace
+// ignore_for_file: file_names, prefer_const_constructors, sized_box_for_whitespace, avoid_unnecessary_containers
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gudang_admin/add.dart';
 import 'package:gudang_admin/api/firebase_service.dart';
-import 'package:gudang_admin/constants.dart';
 import 'package:gudang_admin/edit.dart';
 import 'package:intl/intl.dart';
+
 class HomeAdmin extends StatefulWidget {
   const HomeAdmin({Key? key}) : super(key: key);
 
@@ -19,8 +19,11 @@ class _HomeAdminState extends State<HomeAdmin> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home Admin"),
-        backgroundColor: kPrimaryColor,
+        title: Text(
+          "WareHouse App For Admin",
+          style: TextStyle(fontSize: 23),
+        ),
+        backgroundColor: Colors.amber,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -37,75 +40,102 @@ class _HomeAdminState extends State<HomeAdmin> {
                       var listAllData = snapshot.data!.docs;
                       return Container(
                         height: 730,
-                        
                         child: ListView.builder(
-                          
                           itemCount: listAllData.length,
                           itemBuilder: (context, index) {
-                            Map<String, dynamic> data = listAllData[index].data()!
-                                as Map<String, dynamic>;
+                            Map<String, dynamic> data = listAllData[index]
+                                .data()! as Map<String, dynamic>;
+
                             return Container(
+                              margin: EdgeInsets.fromLTRB(4, 5, 4, 20),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.amber,
+                              ),
                               padding: EdgeInsets.only(top: 20, bottom: 20),
-                              child: Column(
+                              child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Image.network(data["gambar"]),
-                                  SizedBox(height: 15),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                                    child: Container(
+                                      height: 150,
+                                      width: 150,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          image: DecorationImage(
+                                              image: NetworkImage(
+                                                  data["gambar"]))),
+                                    ),
+                                  ),
+                                  SizedBox(height: 20),
+                                  Container(
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                                      child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            "Nama Barang : ${data["nama_barang"]}",
+                                            " ${data["nama_barang"]}",
                                             style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                                fontSize: 21,
+                                                fontWeight: FontWeight.bold,
+                                                fontStyle: FontStyle.italic),
                                           ),
                                           Text(
-                                            "Stok Barang : ${data["stock"]}",
+                                            " Stock: ${data["stock"]}",
                                             style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.w600,
+                                                fontStyle: FontStyle.italic),
                                           ),
                                           Text(
-                                             "Tanggal Masuk : ${DateFormat.yMMMEd().format(data["tgl_masuk"].toDate())}",
+                                            " ${DateFormat.yMMMEd().format(data["tgl_masuk"].toDate())}",
                                             style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.w600,
+                                                fontStyle: FontStyle.italic),
+                                          ),
+                                          Row(
+                                            children: [
+                                              IconButton(
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) => Edit(
+                                                              data: data,
+                                                              docId:
+                                                                  listAllData[
+                                                                          index]
+                                                                      .id)));
+                                                },
+                                                icon:
+                                                    Icon(Icons.edit, size: 30),
+                                              ),
+                                              IconButton(
+                                                onPressed: () {
+                                                  Firebase_service().deleteData(
+                                                      listAllData[index].id,
+                                                      context);
+                                                },
+                                                icon: Icon(
+                                                  Icons.delete,
+                                                  size: 30,
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
-                                      IconButton(
-                                        onPressed: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) => Edit(
-                                                      data: data,
-                                                      docId: listAllData[index]
-                                                          .id)));
-                                        },
-                                        icon: Icon(Icons.edit, size: 30),
-                                      ),
-                                      IconButton(
-                                        onPressed: () {
-                                          Firebase_service().deleteData(
-                                              listAllData[index].id, context);
-                                        },
-                                        icon: Icon(
-                                          Icons.delete,
-                                          size: 30,
-                                        ),
-                                      ),
-                                    ],
+                                    ),
                                   ),
                                 ],
                               ),
@@ -125,15 +155,13 @@ class _HomeAdminState extends State<HomeAdmin> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: kPrimaryColor,
+          backgroundColor: Colors.amber,
           onPressed: () {
-            
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return Add(); 
+              return Add();
             }));
-            
           },
-          child: Icon(Icons.add_box_rounded )),
+          child: Icon(Icons.add_box_rounded)),
     );
   }
 }
