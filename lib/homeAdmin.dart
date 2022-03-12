@@ -6,6 +6,7 @@ import 'package:gudang_admin/add.dart';
 import 'package:gudang_admin/api/firebase_service.dart';
 import 'package:gudang_admin/edit.dart';
 import 'package:intl/intl.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class HomeAdmin extends StatefulWidget {
   const HomeAdmin({Key? key}) : super(key: key);
@@ -39,8 +40,10 @@ class _HomeAdminState extends State<HomeAdmin> {
                     if (snapshot.connectionState == ConnectionState.active) {
                       var listAllData = snapshot.data!.docs;
                       return Container(
-                        height: 730,
+                        height: 750,
                         child: ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
                           itemCount: listAllData.length,
                           itemBuilder: (context, index) {
                             Map<String, dynamic> data = listAllData[index]
@@ -76,8 +79,8 @@ class _HomeAdminState extends State<HomeAdmin> {
                                   SizedBox(height: 20),
                                   Container(
                                     child: Padding(
-                                      padding:
-                                          const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                                      padding: const EdgeInsets.fromLTRB(
+                                          20, 0, 0, 0),
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -97,7 +100,7 @@ class _HomeAdminState extends State<HomeAdmin> {
                                                 fontStyle: FontStyle.italic),
                                           ),
                                           Text(
-                                            " ${DateFormat.yMMMEd().format(data["tgl_masuk"].toDate())}",
+                                            " ${DateFormat.yMMMEd().format(data?["tgl_masuk"].toDate())}",
                                             style: TextStyle(
                                                 fontSize: 17,
                                                 fontWeight: FontWeight.w600,
@@ -122,9 +125,48 @@ class _HomeAdminState extends State<HomeAdmin> {
                                               ),
                                               IconButton(
                                                 onPressed: () {
-                                                  Firebase_service().deleteData(
-                                                      listAllData[index].id,
-                                                      context);
+                                                  Alert(
+                                                    context: context,
+                                                    type: AlertType.warning,
+                                                    title:
+                                                        "You want to delete this thing??",
+                                                    desc: "delete",
+                                                    buttons: [
+                                                      DialogButton(
+                                                        child: Text(
+                                                          "Go back",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 20),
+                                                        ),
+                                                        onPressed: () =>
+                                                            Navigator.pop(
+                                                                context),
+                                                        width: 120,
+                                                        color: Colors.red,
+                                                      ),
+                                                      DialogButton(
+                                                        child: Text(
+                                                          "Delete",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 20),
+                                                        ),
+                                                        onPressed: () {
+                                                          Firebase_service()
+                                                              .deleteData(
+                                                                  listAllData[
+                                                                          index]
+                                                                      .id,
+                                                                  context);
+                                                        },
+                                                        width: 120,
+                                                        color: Colors.amber,
+                                                      )
+                                                    ],
+                                                  ).show();
                                                 },
                                                 icon: Icon(
                                                   Icons.delete,

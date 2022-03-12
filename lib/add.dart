@@ -52,16 +52,19 @@ class _AddState extends State<Add> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Add Product"),
-        backgroundColor: kPrimaryColor,
+        backgroundColor: Colors.amber,
       ),
       
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(11),
           child: Column(
+            
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ListView(
+                 scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
                 children: [
                   SizedBox(
                     height: 40,
@@ -131,11 +134,11 @@ class _AddState extends State<Add> {
                   Container(
                     // padding: EdgeInsets.only(left: 15.0, right: 20.0),
                     height: 50,
-                    width: 250,
+                    width: 200,
                     child: Material(
                       borderRadius: BorderRadius.circular(10),
                       shadowColor: kPrimaryColor.withOpacity(0.5),
-                      color: kPrimaryColor,
+                      color: Colors.amber,
                       elevation: 7.0,
                       child: GestureDetector(
                         onTap: () {
@@ -162,7 +165,7 @@ class _AddState extends State<Add> {
                     child: Material(
                       borderRadius: BorderRadius.circular(10),
                       shadowColor: kPrimaryColor.withOpacity(0.5),
-                      color: kPrimaryColor,
+                      color: Colors.amber,
                       elevation: 7.0,
                       child: GestureDetector(
                         onTap: () {
