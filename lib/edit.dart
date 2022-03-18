@@ -27,13 +27,14 @@ class _EditState extends State<Edit> {
   TextEditingController namaBarang = TextEditingController();
   TextEditingController stockBarang = TextEditingController();
   TextEditingController gambarBarang = TextEditingController();
+  String gambar = "";
 
   @override
   void initState() {
     print(widget.data);
     namaBarang.text = widget.data["nama_barang"];
     stockBarang.text = widget.data["stock"].toString();
-    gambarBarang.text = widget.data["gambar"];
+    gambar = widget.data["gambar"];
     super.initState();
   }
 
@@ -51,7 +52,8 @@ class _EditState extends State<Edit> {
         var downloadURL = await storage.ref('upload/$nama').getDownloadURL();
 
         setState(() {
-          gambarBarang.text = downloadURL;
+          gambar = "";
+          gambar = downloadURL;
         });
       } on FirebaseException catch (e) {
         // e.g, e.code == 'canceled'
@@ -67,7 +69,7 @@ class _EditState extends State<Edit> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add Product"),
+        title: Text("Edit Product"),
         backgroundColor: kPrimaryColor,
       ),
       body: SingleChildScrollView(
@@ -90,7 +92,8 @@ class _EditState extends State<Edit> {
                         hintText: "Nama Barang",
                         labelText: "Barang",
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10))),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10))),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: Colors.black.withOpacity(.5),
@@ -111,7 +114,8 @@ class _EditState extends State<Edit> {
                         hintText: "Stock Barang",
                         labelText: "Stock",
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10))),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10))),
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: Colors.black.withOpacity(.5),
@@ -122,60 +126,43 @@ class _EditState extends State<Edit> {
                         ),
                       ),
                     ),
-                    
                     SizedBox(
                       height: 20,
                     ),
-                    TextField(
-                      controller: gambarBarang,
-                      readOnly: true,
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                        hintText: "Url Barang",
-                        labelText: "Urk",
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10))),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.black.withOpacity(.5),
-                          ),
-                        ),
-                        labelStyle: TextStyle(
-                          color: Colors.black.withOpacity(.5),
-                        ),
-                      ),
-                    ),
+                    (gambar == null || gambar == "")
+                        ? SizedBox()
+                        : Image.network(gambar),
                   ],
                 ),
               ),
               SizedBox(
-                      height: 50,
-                    ),
-                    Container(
-                      // padding: EdgeInsets.only(left: 15.0, right: 20.0),
-                      height: 50,
-                      width: 250,
-                      child: Material(
-                        borderRadius: BorderRadius.circular(10),
-                        shadowColor: kPrimaryColor.withOpacity(0.5),
-                        color: kPrimaryColor,
-                        elevation: 7.0,
-                        child: GestureDetector(
-                          onTap: () {
-                            UploadFile();
-                          },
-                          child: Center(
-                            child: Text(
-                              "Pick Picture",
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            ),
-                          ),
-                        ),
+                height: 50,
+              ),
+              Container(
+                // padding: EdgeInsets.only(left: 15.0, right: 20.0),
+                height: 50,
+                width: 250,
+                child: Material(
+                  borderRadius: BorderRadius.circular(10),
+                  shadowColor: kPrimaryColor.withOpacity(0.5),
+                  color: kPrimaryColor,
+                  elevation: 7.0,
+                  child: GestureDetector(
+                    onTap: () {
+                      UploadFile();
+                    },
+                    child: Center(
+                      child: Text(
+                        "Pick Picture",
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
                       ),
                     ),
+                  ),
+                ),
+              ),
               SizedBox(
                 height: 20,
               ),
@@ -189,8 +176,12 @@ class _EditState extends State<Edit> {
                   elevation: 7.0,
                   child: GestureDetector(
                     onTap: () {
-                      Firebase_service().addProduct(namaBarang.text,
-                          int.parse(stockBarang.text), gambarBarang.text, context);
+                      Firebase_service().updateProduct(
+                          widget.docId,
+                          namaBarang.text,
+                          int.parse(stockBarang.text),
+                          gambarBarang.text,
+                          context);
                     },
                     child: Center(
                       child: Text(

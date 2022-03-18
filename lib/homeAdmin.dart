@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:gudang_admin/add.dart';
 import 'package:gudang_admin/api/firebase_service.dart';
 import 'package:gudang_admin/edit.dart';
+import 'package:gudang_admin/search.dart';
 import 'package:intl/intl.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
@@ -16,8 +17,10 @@ class HomeAdmin extends StatefulWidget {
 }
 
 class _HomeAdminState extends State<HomeAdmin> {
+  TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -31,6 +34,22 @@ class _HomeAdminState extends State<HomeAdmin> {
           padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                 TextField(
+              onSubmitted: ((value) => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Search(search: value)))),
+              controller: searchController,
+              style: TextStyle(color: Colors.black),
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                icon: Icon(Icons.search, size: 34),
+                hintText: "Cari Barang....",
+                hintStyle: TextStyle(fontSize: 15),
+              ),
+            ),
             Column(
               children: [
                 SizedBox(height: 20),
@@ -100,7 +119,7 @@ class _HomeAdminState extends State<HomeAdmin> {
                                                 fontStyle: FontStyle.italic),
                                           ),
                                           Text(
-                                            " ${DateFormat.yMMMEd().format(data?["tgl_masuk"].toDate())}",
+                                            " ${data["tgl_masuk"]}",
                                             style: TextStyle(
                                                 fontSize: 17,
                                                 fontWeight: FontWeight.w600,
@@ -161,6 +180,8 @@ class _HomeAdminState extends State<HomeAdmin> {
                                                                           index]
                                                                       .id,
                                                                   context);
+                                                          Navigator.pop(
+                                                              context);
                                                         },
                                                         width: 120,
                                                         color: Colors.amber,

@@ -21,6 +21,8 @@ class _AddState extends State<Add> {
   TextEditingController namaBarang = TextEditingController();
   TextEditingController stockBarang = TextEditingController();
   TextEditingController gambarBarang = TextEditingController();
+  String gambar = "";
+  DateTime date = DateTime.now();
   void UploadFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
 
@@ -35,6 +37,7 @@ class _AddState extends State<Add> {
         var downloadURL = await storage.ref('upload/$nama').getDownloadURL();
 
         setState(() {
+          gambar = downloadURL;
           gambarBarang.text = downloadURL;
         });
       } on FirebaseException catch (e) {
@@ -54,17 +57,15 @@ class _AddState extends State<Add> {
         title: Text("Add Product"),
         backgroundColor: Colors.amber,
       ),
-      
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(11),
           child: Column(
-            
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ListView(
-                 scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
                 children: [
                   SizedBox(
                     height: 40,
@@ -111,26 +112,27 @@ class _AddState extends State<Add> {
                   SizedBox(
                     height: 20,
                   ),
-                  TextField(
-                     readOnly: true,
-                    controller: gambarBarang,
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                      hintText: "Url Barang",
-                      labelText: "link",
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.black.withOpacity(.5),
+                  (gambar == null || gambar == "")
+                      ? SizedBox()
+                      : Image.network(
+                          gambar,
+                          loadingBuilder: (BuildContext context, Widget child,
+                              ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Center(
+                              child: CircularProgressIndicator(
+                                value: loadingProgress.expectedTotalBytes !=
+                                        null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        loadingProgress.expectedTotalBytes!
+                                    : null,
+                              ),
+                            );
+                          },
                         ),
-                      ),
-                      labelStyle: TextStyle(
-                        color: Colors.black.withOpacity(.5),
-                      ),
-                    ),
+                  SizedBox(
+                    height: 40,
                   ),
-                  SizedBox(height:  40,),
                   Container(
                     // padding: EdgeInsets.only(left: 15.0, right: 20.0),
                     height: 50,
@@ -160,7 +162,8 @@ class _AddState extends State<Add> {
                     height: 10,
                   ),
                   Container(
-                    padding: EdgeInsets.only(top: 40.0, left: 15.0, right: 20.0),
+                    padding:
+                        EdgeInsets.only(top: 40.0, left: 15.0, right: 20.0),
                     height: 110,
                     child: Material(
                       borderRadius: BorderRadius.circular(10),
@@ -173,6 +176,7 @@ class _AddState extends State<Add> {
                               namaBarang.text,
                               int.parse(stockBarang.text),
                               gambarBarang.text,
+                              date,
                               context);
                         },
                         child: Center(
